@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<title>Golos preview</title>
+<style>.map-info-window{background:#333;border-radius:4px;box-shadow:8px 8px 16px #222;color:#fff;max-width:200px;max-height:300px;text-align:center;padding:5px 20px 10px;overflow:hidden;position:absolute;text-transform:uppercase;}#map{width:100%;height:600px;}#mapCanvas{width:100%;height:400px;}input#postingkey{display:block;width:100%;}input{margin:5px 5px 0 5px;}p.help{background:#f9f9f9;color:#868686;padding:5px;border-radius:3px;}.drdrop{padding:10px 0;border-radius:5px;}body{font-family:Arial,Helvetica,sans-serif;color:grey;}input,#text-editor{background:#f7f7f7;border:0;box-shadow:inset 0 0 10px -5px black;color:black;padding:5px;border-radius:5px;}#addimg.loading{background:url(https://s3.postimg.org/ejg32n7er/loading.gif);transition:2s all ease;height:50px;}#addimg.loading.hasload{background:#36c77f;height:auto;}.drdrop span{background:#7aa8ff;border:0;padding:10px;color:white;border-radius:3px;box-shadow:0 0 16px -7px black;cursor:pointer;}#text-editor img{max-width:100%;height:auto;}#text-editor{background:#f7f7f7;min-height:200px;border-radius:5px;padding:1px 10px;}.golos-form{padding:5%;padding-top:0;}#alerts{background:#ff8282;color:white;font-size:18px;border-radius:3px;}input#post-golos-title{width:100%;margin:10px auto;padding:5px;border-radius:5px;font-size:1rem}.golos-form .mce-panel{border-radius:3px;margin:10px auto}.golos-form input[type=submit]{cursor:pointer;background:#248eff;border:0;display:block;margin:20px auto;padding:10px;width:160px;border-radius:3px;color:#fff;box-shadow:0 0 10px -5px #000}</style>
+<meta name="Description" content="С помощью данной страницы вы можете записать в блокчейн голоса координаты места или целой полигональной зоны на карте. Впоследствии воспроизвести данные в кастом клиенте. Математический нотариат + земельный кадастр в перспективе...">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<link rel="icon" type="image/x-icon" href="favicon.ico"/>
+<script src="js/golos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaKws1vkLkuxRcvJpYuMfB2drqX8VBoMI"></script>
+</head>
+
+<body>
+<div class="golos-form">
+<h1>Просмотр публикации Golos</h1>
+<div class="notice"></div>
+<h2>Карта</h2>
+<div id="map"></div>
+<div id="place">...</div>
+<h2>Текст сообщения</h2>
+<div id="post"></div>
+</div>
+<script>
+var name = 'vadbars';
+var link = 'test03';
+
+
+
+steem.api.getContent(name, link, function(err, result) {
+  var content = result.body,
+	  meta = JSON.parse(result.json_metadata),
+	  la = meta.vikmap[0],
+      lo = meta.vikmap[1],
+	  land = meta.vikmap[2],
+	  mapdesc = meta.vikmap[3],
+	  mapimg = meta.vikmap[4],
+	  
+	  place = 'Широта '+la+', Долгота '+lo+', Ближайший адрес '+land;
+	document.getElementById('post').innerHTML = content;
+	document.getElementById('place').innerHTML = place;
+  
+  
+  
+  
+  var golosColors = [
+   
+	{
+      featureType: 'water',
+      elementType: 'geometry',
+      stylers: [
+        { color: '#2574bb' }
+      ]
+    }
+  ];
+  
+  
+  function initMap() {
+  var mrk = {lat: la, lng: lo};
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 18,
+	styles: golosColors,
+    center: mrk
+  });
+
+  var contentString = '<div style="background: #266fb8; color: white; padding: 16px; font-size: 18px; border-radius: 3px;">'+mapdesc+'<img style="display:block;max-width:200px;height:auto;" src="'+mapimg+'"/></div>';//content;
+
+  var infowindow = new google.maps.InfoWindow({
+    content: contentString
+  });
+
+  var marker = new google.maps.Marker({
+    position: mrk,
+    map: map,
+    title: mapdesc,
+	icon: 'favicon.ico'
+  });
+  marker.addListener('click', function() {
+    infowindow.open(map, marker);
+  });
+  infowindow.open(map, marker);
+  
+}
+  
+   
+  initMap();
+  
+});
+
+    
+</script>
+</body>
+</html>
