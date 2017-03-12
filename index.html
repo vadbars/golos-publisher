@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<title>Golos.io publisher</title>
+<link href="css/style.css" rel="stylesheet">
+<meta name="Description" content="Создание страниц на golos.io">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<link rel="icon" type="image/x-icon" href="favicon.ico"/>
+<script async src="js/golos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+<script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/sjcl/1.0.6/sjcl.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaKws1vkLkuxRcvJpYuMfB2drqX8VBoMI"></script>
+<!-- script src="js/publisher.js"></script -->
+</head>
+<body>
+<div class="golos-form">
+<h1>Публикация в Golos</h1>
+<div id="mapCanvas"></div>
+<div id="panel">
+<input id="city_country" type="textbox" value="Yekaterinburg">
+<input type="button" value="Поиск" onclick="codeAddress()">
+</div>
+<div id="info"></div>
+<div id="address"></div>
+<form id="post-golos-form" enctype="multipart/form-data">
+<input type="text" name="map-desc" id="mapdesc" placeholder="Заметка над маркером на карте">
+<input type="text" name="mapimg-url" id="mapimg" placeholder="URL изображения для заметки">
+
+<h2>Содержание поста:</h2>
+<input type="text" name="post-golos-title" id="post-golos-title" required aria-required="true" placeholder="Заголовок">
+<div class="drdrop"><span id="addimg" onclick="document.querySelector('#loadinp').click()">Загрузить фото</span></div><input id="loadinp" style="visibility: collapse; width: 0px;" type="file" onchange="upload(this.files[0])">
+<div id="text-editor"></div>
+<p>Ваш логин: <input type="text" id="username" name="username" required aria-required="true" placeholder="Логин"></p>
+<p>Ключ постинга: <input type="password" id="postingkey" name="postingkey" title="Никому не сообщайте свой ключ!" placeholder="Постинг ключ"/></p>
+<p>Адрес публикации: <small>https://golos.io/</small><input title="Допускаются только латинские маленькие буквы или дефис" type="text" id="topic" name="topic" required aria-required="true" placeholder="Топик. Например, ru--golos" pattern="[a-z0-9-]+"/><small>/@логин/</small><input type="text" id="permlink" name="permlink" required aria-required="true" title="Допускаются только латинские маленькие буквы или дефис. Введите желаемую ссылку вида: my-postname" placeholder="Ссылка на пост" pattern="[a-z0-9-]+"/></p>
+<p>Теги: <input type="text" id="tag1" name="tag1" placeholder="Тег 1" pattern="[a-z0-9-]+">
+<input type="text" id="tag2" name="tag2" placeholder="Тег 2" pattern="[a-z0-9-]+">
+<input type="text" id="tag3" name="tag3" placeholder="Тег 3" pattern="[a-z0-9-]+"></p>
+<input type="submit" value="Отправить">
+</form>
+<div id="alerts"></div>
+</div>
+<script src="js/publisher.js"></script>
+</body>
+</html>
